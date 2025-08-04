@@ -113,26 +113,37 @@ Then visit `http://localhost:8000` in your browser.
 
 ### Adding Items
 ```javascript
-const li = document.createElement('li');
-li.classList.add('list-group-item');
-li.appendChild(document.createTextNode(input.value));
-list.appendChild(li);
+  static addItemToList(item) {
+    const list = document.querySelector('#list-group');
+    const li = document.createElement('li');
+    li.className = 'list-group-item';
+    li.setAttribute('data-id', item.id);
+
+    const span = document.createElement('span');
+    span.textContent = item.text;
+    li.appendChild(span);
+
+    const button = document.createElement('button');
+    button.className = 'btn btn-danger';
+    button.appendChild(document.createTextNode('X'));
+    li.appendChild(button);
+    list.appendChild(li);
+  }
 ```
 
 ### Search Functionality
 ```javascript
-searchInput.addEventListener('input', function(e) {
-  const searchValue = e.target.value.toLowerCase();
-  const items = document.querySelectorAll('.list-group-item');
-  items.forEach(function(item) {
-    const text = item.textContent.toLowerCase();
-    if (text.includes(searchValue)) {
-      item.style.display = 'flex';
-    } else {
-      item.style.display = 'none';
-    }
-  });
-});
+  static searchItems(searchValue) {
+    const items = document.querySelectorAll('.list-group-item');
+    items.forEach((item) => {
+       const itemText = item.querySelector('span').textContent.toLowerCase();
+       if(itemText.includes(searchValue.toLowerCase())) {
+        item.style.display = 'flex';
+       } else {
+        item.style.display = 'none';
+       }
+    })
+  }
 ```
 
 ## 📱 Browser Support
