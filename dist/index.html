@@ -5,18 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item lister</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header class="main-header">
         <div class="container">
-            <h1 class="main-header__title">Todo List</h1>
+            <h1 class="main-header__title">To-do List</h1>
             <form class="main-header_form">
-                <input type="search" class="main-header__search" id="search" placeholder="Search...">
+                <input type="search" class="main-header__search" id="search" placeholder="Search..." title="search">
+                <i class="fas fa-filter filter"></i>
+                <ul class="filter_list hidden">
+                    <li class="filter_list__option" data-filter="all">All</li>
+                    <li class="filter_list__option" data-filter="completed">Completed</li>
+                    <li class="filter_list__option" data-filter="pending">pending</li>
+                </ul>
             </form>
         </div>
     </header>
 
-    <div class="container">
+    <div class="container main-container">
         <div id="main" class="main">
             <h2 class="title">Add Item</h2>
             <form id="form-control" class="form-control">
@@ -29,6 +37,8 @@
         </div>
     </div>
 
-     <script src="script.js"></script>
+    <script src="script.js"></script>
+
+     
 </body>
 </html>

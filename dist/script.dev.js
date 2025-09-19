@@ -36,15 +36,48 @@ function () {
       var list = document.querySelector('#list-group');
       var li = document.createElement('li');
       li.className = 'list-group-item';
-      li.setAttribute('data-id', item.id);
+      li.setAttribute('data-id', item.id); // Check if item is completed
+
+      if (item.completed) {
+        li.classList.add('completed');
+      }
+
+      var checkBox = document.createElement('input');
+      checkBox.type = 'checkbox';
+      checkBox.className = 'form_checkbox';
+      checkBox.checked = item.completed;
+      li.appendChild(checkBox);
       var span = document.createElement('span');
       span.textContent = item.text;
       li.appendChild(span);
       var button = document.createElement('button');
       button.className = 'btn btn-danger';
-      button.appendChild(document.createTextNode('X'));
+      button.appendChild(document.createTextNode('X')); // Disable delete button if item is completed
+
+      if (item.completed) {
+        button.disabled = true;
+        button.classList.add('unclickable');
+      }
+
       li.appendChild(button);
       list.appendChild(li);
+    }
+  }, {
+    key: "toggleItem",
+    value: function toggleItem(liElement) {
+      var checkBox = liElement.querySelector('.form_checkbox');
+      var button = liElement.querySelector('btn-danger');
+      var isCompleted = checkBox.checked; // Update UI
+
+      liElement.classList.toggle('completed', isCompleted);
+
+      if (isCompleted) {
+        button.disabled = true;
+        button.classList.add('unclickable');
+      } else {
+        button.disabled = false;
+        button.classList.remove('unclickable');
+      }
     }
   }, {
     key: "deleteItem",
@@ -125,6 +158,21 @@ function () {
       });
       localStorage.setItem('items', JSON.stringify(filteredItems));
     }
+  }, {
+    key: "updateItem",
+    value: function updateItem(id) {
+      var items = Store.getItems();
+      var item = items.find(function (item) {
+        return item.id === id;
+      });
+
+      if (item) {
+        item.completed = !item.completed;
+        localStorage.setItem('items', JSON.stringify(items));
+      }
+
+      return item ? item.completed : false;
+    }
   }]);
 
   return Store;
@@ -145,14 +193,32 @@ document.querySelector('#form-control').addEventListener('submit', function (e) 
     UI.showAlert('Item Added', 'success');
     UI.clearFields();
   }
+}); // Toggle item
+
+document.querySelector('#list-group').addEventListener('click', function (e) {
+  if (e.target.classList.contains('form_checkbox')) {
+    var li = e.target.closest('.list-group-item');
+    var itemId = Number(li.getAttribute('data-id')); // Update storage  
+
+    Store.updateItem(itemId); // Update UI
+
+    UI.toggleItem(li);
+    UI.showAlert('Item Completed', 'success');
+  } else {
+    return;
+  }
 }); // Delete an item
 
 document.querySelector('#list-group').addEventListener('click', function (e) {
   if (e.target.classList.contains('btn-danger')) {
-    UI.deleteItem(e.target);
-    var itemId = e.target.parentElement.getAttribute('data-id');
-    Store.removeItem(Number(itemId));
-    UI.showAlert('Item Removed', 'success');
+    // if button is not disabled 
+    if (!e.target.disabled) {
+      var li = e.target.closest('.list-group-item');
+      var itemId = Number(li.getAttribute('data-id'));
+      UI.deleteItem(li);
+      Store.removeItem(itemId);
+      UI.showAlert('Item Deleted', 'success');
+    }
   }
 }); // Search items
 

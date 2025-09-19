@@ -18,6 +18,17 @@ class UI {
     li.className = 'list-group-item';
     li.setAttribute('data-id', item.id);
 
+    // Check if item is completed
+    if (item.completed) {
+      li.classList.add('completed');
+    }
+    const checkBox = document.createElement('input');
+    checkBox.type = 'checkbox';
+    checkBox.className = 'form_checkbox';
+    checkBox.checked = item.completed;
+    li.appendChild(checkBox);
+
+
     const span = document.createElement('span');
     span.textContent = item.text;
     li.appendChild(span);
@@ -25,9 +36,36 @@ class UI {
     const button = document.createElement('button');
     button.className = 'btn btn-danger';
     button.appendChild(document.createTextNode('X'));
+
+  // Disable delete button if item is completed
+  if(item.completed) {
+    button.disabled = true;
+    button.classList.add('unclickable');
+  }
+
     li.appendChild(button);
     list.appendChild(li);
   }
+
+
+  static toggleItem(liElement) {
+    const checkBox = liElement.querySelector('.form_checkbox');
+    const button = liElement.querySelector('btn-danger');
+    const isCompleted = checkBox.checked;
+
+    // Update UI
+    liElement.classList.toggle('completed', isCompleted);
+    
+
+    if (isCompleted) {
+      button.disabled = true;
+      button.classList.add('unclickable');
+    } else {
+      button.disabled = false;
+      button.classList.remove('unclickable');
+    }
+  }
+
 
   static deleteItem(el) {
       el.parentElement.remove();
@@ -86,9 +124,19 @@ class Store {
     localStorage.setItem('items', JSON.stringify(filteredItems));
  }
 
+ static updateItem(id) {
+  const items = Store.getItems();
+  const item = items.find(item => item.id === id);
+  if (item) {
+    item.completed = !item.completed;
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+  return item ? item.completed : false;
+ }
 }
 
 // Event Listeners 
+
 document.addEventListener('DOMContentLoaded', UI.displayItems);
 
 document.querySelector('#form-control').addEventListener('submit', (e) => {
@@ -105,15 +153,41 @@ document.querySelector('#form-control').addEventListener('submit', (e) => {
   }
   });
 
+  // Toggle item
+document.querySelector('#list-group').addEventListener('click', (e) => {
+  if ( e.target.classList.contains('form_checkbox')) {
+  const li = e.target.closest('.list-group-item');
+  const itemId = Number(li.getAttribute('data-id'));
+  
+  // Update storage  
+  Store.updateItem(itemId);
+
+  // Update UI
+  UI.toggleItem(li);
+  UI.showAlert('Item Completed', 'success');
+  
+  } else {
+    return;
+  }
+});
+
   // Delete an item
 document.querySelector('#list-group').addEventListener('click', (e) => {
   if ( e.target.classList.contains('btn-danger')) {
-  UI.deleteItem(e.target);
-  const itemId = e.target.parentElement.getAttribute('data-id');
-  Store.removeItem(Number(itemId));
-  UI.showAlert('Item Removed', 'success');
+
+    // if button is not disabled 
+    if (!e.target.disabled) {
+      const li = e.target.closest('.list-group-item');
+      const itemId = Number(li.getAttribute('data-id'));
+      
+      UI.deleteItem(li);
+      Store.removeItem(itemId);
+      UI.showAlert('Item Deleted', 'success');
+    }
   }
 });
+
+
 
 // Search items
 document.querySelector('#search').addEventListener('keyup', (e) => {
