@@ -55,7 +55,7 @@ function () {
       button.appendChild(document.createTextNode('X')); // Disable delete button if item is completed
 
       if (item.completed) {
-        button.disabled = true;
+        button.disabled = false;
         button.classList.add('unclickable');
       }
 
@@ -109,6 +109,32 @@ function () {
           item.style.display = 'flex';
         } else {
           item.style.display = 'none';
+        }
+      });
+    }
+  }, {
+    key: "filterItems",
+    value: function filterItems(filter) {
+      var items = document.querySelectorAll('.list-group-item');
+      items.forEach(function (item) {
+        if (filter === "all") {
+          item.style.display = 'flex';
+        }
+
+        if (filter === "completed") {
+          if (item.classList.contains('completed')) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        }
+
+        if (filter === "pending") {
+          if (!item.classList.contains('completed')) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
         }
       });
     }
@@ -225,5 +251,19 @@ document.querySelector('#list-group').addEventListener('click', function (e) {
 document.querySelector('#search').addEventListener('keyup', function (e) {
   var searchValue = e.target.value;
   UI.searchItems(searchValue);
+}); // Display Filter items
+
+var icon = document.getElementsByTagName('i')[0];
+icon.addEventListener('click', function (e) {
+  document.querySelector('.filter_list').classList.toggle('hidden');
+  document.querySelector('.filter_list').classList.add('show');
+}); // Filter items Options
+
+document.querySelector('.filter_list').addEventListener('click', function (e) {
+  if (e.target.classList.contains('filter_list__option')) {
+    var option = e.target.getAttribute('data-filter');
+    UI.filterItems(option);
+    document.querySelector('.filter_list').classList.remove('show');
+  }
 });
 //# sourceMappingURL=script.dev.js.map

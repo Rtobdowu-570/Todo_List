@@ -39,7 +39,7 @@ class UI {
 
   // Disable delete button if item is completed
   if(item.completed) {
-    button.disabled = true;
+    button.disabled = false;
     button.classList.add('unclickable');
   }
 
@@ -94,6 +94,30 @@ class UI {
        }
     })
   }
+
+  static filterItems(filter) {
+    const items = document.querySelectorAll('.list-group-item');
+    items.forEach((item) => {
+      if (filter === "all") {
+        item.style.display = 'flex';
+      }
+      if (filter === "completed") {
+        if (item.classList.contains('completed')) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      }
+      if (filter === "pending") {
+        if (!item.classList.contains('completed')) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      }
+    })
+      }
+
 
   static clearFields() {
     document.querySelector('#input').value = '';
@@ -179,7 +203,7 @@ document.querySelector('#list-group').addEventListener('click', (e) => {
     if (!e.target.disabled) {
       const li = e.target.closest('.list-group-item');
       const itemId = Number(li.getAttribute('data-id'));
-      
+
       UI.deleteItem(li);
       Store.removeItem(itemId);
       UI.showAlert('Item Deleted', 'success');
@@ -187,10 +211,24 @@ document.querySelector('#list-group').addEventListener('click', (e) => {
   }
 });
 
-
-
 // Search items
 document.querySelector('#search').addEventListener('keyup', (e) => {
   const searchValue = e.target.value;
   UI.searchItems(searchValue);
+});
+
+// Display Filter items
+let icon = document.getElementsByTagName('i')[0];
+icon.addEventListener('click', (e) => {
+  document.querySelector('.filter_list').classList.toggle('hidden');
+  document.querySelector('.filter_list').classList.add('show');
+});
+
+// Filter items Options
+document.querySelector('.filter_list').addEventListener('click', (e) => {
+  if (e.target.classList.contains('filter_list__option')) {
+    const option = e.target.getAttribute('data-filter');
+    UI.filterItems(option);
+    document.querySelector('.filter_list').classList.remove('show');
+  }
 });

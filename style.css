@@ -87,7 +87,7 @@ body {
 /* Filter icon */
 .filter {
   position: absolute;
-  right: 60px;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
   color: #333;
@@ -248,9 +248,6 @@ body {
   list-style: none;
 }
 
-.filter_list.show {
-  display: block;
-}
 
 .filter_list__title {
   font-size: 1.3rem;
@@ -259,9 +256,6 @@ body {
   margin-bottom: 20px;
 }
 
-.filter_list__options {
-  list-style: none;
-}
 
 .filter_list__option {
   padding: 10px 20px;
@@ -283,6 +277,10 @@ body {
 
 .hidden {
   display: none;
+}
+
+.show{
+  display: block;
 }
 
 .unclickable {
