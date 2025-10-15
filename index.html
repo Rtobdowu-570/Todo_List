@@ -3,42 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Item lister</title>
+    <title>To-do Task Manager</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <header class="main-header">
-        <div class="container">
-            <h1 class="main-header__title">To-do List</h1>
-            <form class="main-header_form">
-                <input type="search" class="main-header__search" id="search" placeholder="Search..." title="search">
-                <i class="fas fa-filter filter" title="filter" id="filter"></i>
-                <ul class="filter_list hidden">
-                    <li class="filter_list__option" data-filter="all">All</li>
-                    <li class="filter_list__option" data-filter="completed">Completed</li>
-                    <li class="filter_list__option" data-filter="pending">pending</li>
-                </ul>
-            </form>
-        </div>
-    </header>
+    <div class="container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <span class="btn-close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </span>
+                    <span class="btn-minimize">
+                        <i class="fa-solid fa-minus"></i>
+                    </span>
+                    <span class="btn-maximize">
+                        <i class="fa-solid fa-plus"></i>
+                    </span>
+                </div>
 
-    <div class="container main-container">
-        <div id="main" class="main">
-            <h2 class="title">Add Item</h2>
-            <form id="form-control" class="form-control">
-                <input type="text" name="input" id="input" placeholder="Add Item..." title="form-input">
-                <button type="submit" id="form-submit" class="btn">Submit</button>
-            </form>
+                <div class="terminal-title">todo.exe</div>
 
-            <ul id="list-group" class="list-group">
-            </ul>
+                <div class="btn-filter">
+                    <i class="fa-solid fa-filter"></i>
+                </div>
+
+                <div class="filter-options hidden">
+                        <span class="filter-option">Total</span>
+                        <span class="filter-option">Completed</span>
+                        <span class="filter-option">Pending</span>
+                </div>
+
+            </div>
+
+            <div class="terminal-content">
+                 Title Section 
+                <div class="terminal-prompt">
+                    <span class="prompt-symbol">❯</span>
+                    <span class="prompt-text">TASK MANAGER v1.49 <span class="blink">|</span></span>
+                </div>
+
+                <div class="input-section">
+                    <div class="input-line">
+                        <span class="prompt-symbol">❯</span>
+                        <span class="input-label">add:</span>
+                        <input type="text" class="terminal-input" placeholder="describe your task...">
+                    </div>
+                    
+                    <div class="command-hints">
+                        <span class="hint">[enter] add task</span>
+                        <span class="hint">[click] toggle</span>
+                        <span class="hint">[x] delete</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="tasks-section">
+                    <h2 class="section-title">ACTIVE TASKS</h2>
+                    
+                    <div class="tasks-container">
+                        <div class="empty-state">
+                            <p class="comment">// no tasks found</p>
+                            <p class="comment">// add your first task above</p>
+                        </div>
+
+                        <div class="task-list">
+                            <!-- Tasks will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal-footer">
+                <div class="stats">
+                    <span>Total: 0</span>
+                    <span class="separator">|</span>
+                    <span>Completed: 0</span>
+                    <span class="separator">|</span>
+                    <span>Pending: 0</span>
+                </div>
+                <div class="security">Security: Active</div>
+            </div>
         </div>
     </div>
 
     <script src="script.js"></script>
-
-     
 </body>
 </html>
